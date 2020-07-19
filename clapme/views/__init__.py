@@ -1,7 +1,7 @@
-# from clapme.__init__ import api
 from flask_restful import Resource
-from .goal import ApiGoal
-from .viewss import ApiUserGoalList, ApiUserGoal, ApiGoalSuccessList, ApiGoalCommentList
+
+from .api_auth import ApiLogin, ApiSignup
+from .api_service import ApiRoutine, ApiRoutines, ApiRoutineSuccess, ApiRoutineMaterials, ApiIdea
 
 
 class HelloWorld(Resource):
@@ -11,8 +11,10 @@ class HelloWorld(Resource):
 
 def initialize_routes(api):
     api.add_resource(HelloWorld, '/')
-    api.add_resource(ApiGoal, '/goal/', '/goal/<int:id>')
-    api.add_resource(ApiUserGoalList, '/user-goal/')
-    api.add_resource(ApiUserGoal, '/user-goal/<int:goal_id>')
-    api.add_resource(ApiGoalSuccessList, '/goal-success/<int:goal_id>')
-    api.add_resource(ApiGoalCommentList, '/goal-comment/<int:goal_id>')
+    api.add_resource(ApiLogin, '/login')
+    api.add_resource(ApiSignup, '/signup')
+    api.add_resource(ApiRoutine, '/routine', '/routine/<int:routine_id>')
+    api.add_resource(ApiRoutines, '/routines')
+    api.add_resource(ApiRoutineSuccess, '/routine-success')
+    api.add_resource(ApiRoutineMaterials, '/routine-materials')
+    api.add_resource(ApiIdea, '/idea')
