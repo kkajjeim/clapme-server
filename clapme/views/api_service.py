@@ -4,7 +4,7 @@ from flask import request
 from jsonschema import validate, ValidationError
 
 from ..models import db, Routine, Success, Color, Idea
-from ..util.constant import color_sets
+# from ..util.constant import color_sets
 
 from .api_auth import authenticate, decode_info
 from .validation import validate_time, validate_day, validate_date_str, \
@@ -131,7 +131,8 @@ class ApiRoutines(Resource):
             .filter_by(**success_filter_option)\
             .all()
 
-        success_routine_id_list = list(map(lambda r: r.id, success_routine_list))
+        success_routine_id_list = list(
+            map(lambda r: r.id, success_routine_list))
 
         result = []
         for routine in routine_list:
@@ -192,7 +193,7 @@ class ApiRoutineMaterials(Resource):
 
             colors.append({
                 'main': main_hex_code,
-                'sub': color_sets[main_hex_code]
+                'sub': '0xFF000000'
             })
 
         return {'colors': colors}, 200
@@ -215,15 +216,3 @@ class ApiIdea(Resource):
 
         else:
             abort(400)
-
-
-
-
-
-
-
-
-
-
-
-
