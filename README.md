@@ -1,5 +1,6 @@
 ## clapme
-this is clamp repository
+this is server repository of clapme project
+
 
 ### 1. create and activate venv
 
@@ -8,11 +9,13 @@ python3 -m venv venv
 source venv/bin/activate
 ```
 
+
 ### 2. install packages using pip
 
 ```shell
 pip install -r requirements.txt
 ```
+
 
 ### 3. run server
 
@@ -22,6 +25,7 @@ FLASK_APP=__init__.py flask run
 (or)
 python3 __init__.py
 ```
+
 
 ### 4. schemas
 
