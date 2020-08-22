@@ -190,10 +190,12 @@ class ApiRoutineMaterials(Resource):
         colors = []
         for main in main_colors:
             main_hex_code = main.hex_code
+            bright_colors = ['0xff8C4332', '0xffF2EAC2']
+            sub_hex_code = '0xDD000000' if main_hex_code in bright_colors else '0xFF000000'
 
             colors.append({
                 'main': main_hex_code,
-                'sub': '0xFF000000'
+                'sub': sub_hex_code
             })
 
         return {'colors': colors}, 200
