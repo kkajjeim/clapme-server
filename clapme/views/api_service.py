@@ -168,10 +168,12 @@ class ApiRoutineSuccess(Resource):
             'date_str': json_data['dateStr']
         }
 
-        if Success.query.filter_by(**new_success).first() is not None:
-            db.session.delete(Success(**new_success))
-        else:
+        target_success = Success.query.filter_by(**new_success).first()
+
+        if target_success is None:
             db.session.add(Success(**new_success))
+        else:
+            db.session.delete(target_success)
 
         db.session.commit()
 
