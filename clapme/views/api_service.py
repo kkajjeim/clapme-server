@@ -180,6 +180,37 @@ class ApiRoutineSuccess(Resource):
             json_data['dateStr']
         ), 200
 
+    def delete(self):
+        token = request.headers.get('Authorization')
+        user_id = decode_info(token, ['id'])['id']
+
+        json_data = request.get_json(force=True)
+
+        try:
+            validate(instance=json_data, schema=routine_success_post_request)
+            validate_day(json_data['day'])
+            validate_date_str(json_data['dateStr'])
+        except ValidationError:
+            abort(400)
+
+        target_success = {
+            'routine_id': json_data['id'],
+            'day': json_data['day'],
+            'date_str': json_data['dateStr']
+        }
+
+        if Success.query.filter_by(**target_success).first() is None:
+            abort(404)
+
+        db.session.delete(Success(**target_success))
+        db.session.commit()
+
+        return ApiRoutines.get_daily_routines_with_status(
+            user_id,
+            json_data['day'],
+            json_data['dateStr']
+        ), 200
+
 
 class ApiRoutineMaterials(Resource):
     method_decorators = [authenticate]
@@ -190,7 +221,10 @@ class ApiRoutineMaterials(Resource):
         colors = []
         for main in main_colors:
             main_hex_code = main.hex_code
+            print(main_hex_code)
             bright_colors = ['0xff8C4332', '0xffF2EAC2']
+            if main_hex_code in bright_colors:
+                print('있지있지있지')
             sub_hex_code = '0xDD000000' if main_hex_code in bright_colors else '0xFF000000'
 
             colors.append({
