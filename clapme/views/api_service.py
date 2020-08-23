@@ -169,40 +169,10 @@ class ApiRoutineSuccess(Resource):
         }
 
         if Success.query.filter_by(**new_success).first() is not None:
-            abort(409)
+            db.session.delete(Success(**new_success))
+        else:
+            db.session.add(Success(**new_success))
 
-        db.session.add(Success(**new_success))
-        db.session.commit()
-
-        return ApiRoutines.get_daily_routines_with_status(
-            user_id,
-            json_data['day'],
-            json_data['dateStr']
-        ), 200
-
-    def delete(self):
-        token = request.headers.get('Authorization')
-        user_id = decode_info(token, ['id'])['id']
-
-        json_data = request.get_json(force=True)
-
-        try:
-            validate(instance=json_data, schema=routine_success_post_request)
-            validate_day(json_data['day'])
-            validate_date_str(json_data['dateStr'])
-        except ValidationError:
-            abort(400)
-
-        target_success = {
-            'routine_id': json_data['id'],
-            'day': json_data['day'],
-            'date_str': json_data['dateStr']
-        }
-
-        if Success.query.filter_by(**target_success).first() is None:
-            abort(404)
-
-        db.session.delete(Success(**target_success))
         db.session.commit()
 
         return ApiRoutines.get_daily_routines_with_status(
